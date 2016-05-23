@@ -8,8 +8,8 @@ class Player {
     private speedX : number;
     private speedY : number;
     
-    private rightkey : number = 38;
-    private leftkey : number = 40;
+    private rightkey : number = 37;
+    private leftkey : number = 39;
     private downSpeed : number = 0;
     private upSpeed : number = 0;
     
