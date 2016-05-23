@@ -4,6 +4,7 @@ var Game = (function () {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.gameLoop = function () {
+        this.player.move();
         requestAnimationFrame(this.gameLoop.bind(this));
     };
     return Game;
@@ -15,8 +16,8 @@ var Player = (function () {
     function Player() {
         this.posX = 500;
         this.posY = 500;
-        this.rightkey = 38;
-        this.leftkey = 40;
+        this.rightkey = 37;
+        this.leftkey = 39;
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.div = document.createElement("player");

@@ -12,6 +12,7 @@ class Game {
     
     private gameLoop(){
         // roep hier de move functie van de bal aan
+           this.player.move();
            
         // hiermee wordt de gameloop opnieuw aangeroepen
         requestAnimationFrame(this.gameLoop.bind(this));
