@@ -1,66 +1,54 @@
-var Bubble = (function () {
-    function Bubble() {
-        var posx = Math.round(Math.random() * window.innerWidth) - 120;
-        var newbubble = document.createElement("bubble");
-        document.body.appendChild(newbubble);
-        newbubble.style.left = posx + "px";
+var Game = (function () {
+    function Game() {
+        this.player = new Player;
+        requestAnimationFrame(this.gameLoop.bind(this));
     }
-    return Bubble;
-}());
-var Fish = (function () {
-    function Fish() {
-        var posx = Math.round(Math.random() * window.innerWidth) - 120;
-        var posy = Math.round(Math.random() * window.innerHeight) - 120;
-        this.newfish = document.createElement("fish");
-        this.newfish.addEventListener("click", this.killFish.bind(this));
-        document.body.appendChild(this.newfish);
-        this.newfish.style.top = posy + "px";
-        this.newfish.style.left = posx + "px";
-        var hue = Math.round(Math.random() * 1080);
-        this.newfish.style.filter = "heu-rotate(" + hue + "deg)";
-        this.newfish.style.webkitFilter = "hue-rotate(" + hue + "deg)";
-    }
-    Fish.prototype.killFish = function (e) {
-        e.target.classList.add("deadfish");
-        console.log(e.target);
+    Game.prototype.gameLoop = function () {
+        requestAnimationFrame(this.gameLoop.bind(this));
     };
-    return Fish;
-}());
-var Main = (function () {
-    function Main() {
-        var posx = window.innerWidth / 2;
-        var posy = window.innerHeight / 2;
-        var title = document.createElement("titlepic");
-        document.body.appendChild(title);
-        title.style.top = posy - 200 + "px";
-        title.style.left = posx - 400 + "px";
-        var start = document.createElement("startbutton");
-        start.addEventListener("click", this.startTimer.bind(this));
-        document.body.appendChild(start);
-        start.style.top = posy - 80 + "px";
-        start.style.left = posx - 150 + "px";
-    }
-    Main.prototype.startTimer = function () {
-        var title = document.getElementsByTagName("titlepic")[0];
-        title.style.visibility = 'hidden';
-        var startbutton = document.getElementsByTagName("startbutton")[0];
-        startbutton.style.visibility = 'hidden';
-        setInterval(this.newFish.bind(this), 250);
-        setInterval(this.newBubble.bind(this), 500);
-    };
-    Main.prototype.newFish = function () {
-        var newfish = new Fish();
-    };
-    Main.prototype.newBubble = function () {
-        var newbubble = new Bubble();
-    };
-    Main.prototype.killFish = function (e) {
-        e.target.classList.add("deadfish");
-        console.log(e.target);
-    };
-    return Main;
+    return Game;
 }());
 window.addEventListener("load", function () {
-    new Main();
+    new Game();
 });
+var Player = (function () {
+    function Player() {
+        this.posX = 500;
+        this.posY = 500;
+        this.rightkey = 38;
+        this.leftkey = 40;
+        this.downSpeed = 0;
+        this.upSpeed = 0;
+        this.div = document.createElement("player");
+        document.body.appendChild(this.div);
+        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        window.addEventListener("keydown", this.onKeyDown.bind(this));
+        window.addEventListener("keyup", this.onKeyUp.bind(this));
+    }
+    Player.prototype.onKeyDown = function (event) {
+        switch (event.keyCode) {
+            case this.rightkey:
+                this.upSpeed = 5;
+                break;
+            case this.leftkey:
+                this.downSpeed = 5;
+                break;
+        }
+    };
+    Player.prototype.onKeyUp = function (event) {
+        switch (event.keyCode) {
+            case this.rightkey:
+                this.upSpeed = 0;
+                break;
+            case this.leftkey:
+                this.downSpeed = 0;
+                break;
+        }
+    };
+    Player.prototype.move = function () {
+        this.posX = this.posX - this.upSpeed + this.downSpeed;
+        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
+    };
+    return Player;
+}());
 //# sourceMappingURL=main.js.map

@@ -13,7 +13,7 @@ body * {
     background-repeat: no-repeat;
 }
 
-fish {
+player {
     background-image: url(../images/fish.png);
     width:130px; height: 110px;
     
