@@ -11,6 +11,13 @@ var Game = (function () {
 window.addEventListener("load", function () {
     new Game();
 });
+var Startmenu = (function () {
+    function Startmenu() {
+        this.div = document.createElement("Start");
+        document.body.appendChild(this.div);
+    }
+    return Startmenu;
+}());
 var Player = (function () {
     function Player() {
         this.posX = 500;
