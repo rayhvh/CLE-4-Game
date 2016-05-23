@@ -54,15 +54,7 @@ background {
 	background-image: url(../images/bones.png);
 }
 
-@keyframes fishanimation {
-  0% {
-    transform: translateY(20px);
-  }
-  
-  100% {
-    transform: translateY(80px);
-  }
-}
+
 
 @keyframes bubbleup {
   0% {
