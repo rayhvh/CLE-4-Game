@@ -50,7 +50,7 @@ healthy{
 }
 
 background {
-    background-image: url(../images/menubackground.png);
+    background-image: url(../images/healthbackground.png);
     width:100%; height: 100%;
     background-size: cover;
 }

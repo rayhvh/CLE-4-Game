@@ -41,11 +41,15 @@ var Healthy = (function () {
         this.leftkey = 39;
         this.div = document.createElement("healthy");
         document.body.appendChild(this.div);
+        this.posX = (Math.random() * window.innerWidth);
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         requestAnimationFrame(function () { return _this.auto(); });
     }
     Healthy.prototype.auto = function () {
         this.posY++;
+        if (this.posY == window.innerHeight) {
+            document.body.removeChild(this.div);
+        }
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
     };
     return Healthy;
