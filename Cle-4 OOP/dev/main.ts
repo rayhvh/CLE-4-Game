@@ -2,4 +2,5 @@
 
 window.addEventListener("load", function() {
     new Game();
+    new Game1();
 });

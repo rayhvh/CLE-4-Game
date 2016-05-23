@@ -1,3 +1,9 @@
+var Game1 = (function () {
+    function Game1() {
+        this.Startmenu = new Startmenu;
+    }
+    return Game1;
+}());
 var Game = (function () {
     function Game() {
         this.player = new Player;
@@ -11,7 +17,15 @@ var Game = (function () {
 }());
 window.addEventListener("load", function () {
     new Game();
+    new Game1();
 });
+var Startmenu = (function () {
+    function Startmenu() {
+        this.div = document.createElement("Start");
+        document.body.appendChild(this.div);
+    }
+    return Startmenu;
+}());
 var Player = (function () {
     function Player() {
         this.posX = 500;
