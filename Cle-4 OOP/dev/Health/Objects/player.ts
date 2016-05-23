@@ -3,8 +3,8 @@
  */
 class Player {
     private div : HTMLElement;
-    private posX : number = 500;
-    private posY : number = 500;
+    private posX : number = window.innerWidth-130;
+    private posY : number = window.innerHeight-100;
     private speedX : number;
     private speedY : number;
     
