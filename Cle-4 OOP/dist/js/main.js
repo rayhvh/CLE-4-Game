@@ -1,40 +1,34 @@
-var Game1 = (function () {
-    function Game1() {
-        this.Startmenu = new Startmenu;
-    }
-    return Game1;
-}());
 var Game = (function () {
     function Game() {
+        this.Healthys = new Array();
+        this.frameCounter = 0;
+        this.spawnFrequency = 60;
         this.player = new Player;
-        this.Healthy = new Healthy;
         requestAnimationFrame(this.gameLoop.bind(this));
     }
+    Game.prototype.spawnObject = function () {
+        this.Healthys.push(new Healthy());
+    };
     Game.prototype.gameLoop = function () {
+        this.frameCounter++;
+        if (this.frameCounter > this.spawnFrequency) {
+            this.spawnObject();
+            this.frameCounter = 0;
+            console.log(this.frameCounter);
+        }
         this.player.move();
-        this.Healthy.auto();
+        for (var i = 0; i < this.Healthys.length; i++) {
+            this.Healthys[i].update();
+        }
         requestAnimationFrame(this.gameLoop.bind(this));
     };
     return Game;
 }());
 window.addEventListener("load", function () {
-    new Game1();
-    var start = document.getElementsByTagName("start");
-    window.addEventListener("click", clicked);
-});
-function clicked() {
     new Game();
-}
-var Startmenu = (function () {
-    function Startmenu() {
-        this.div = document.createElement("Start");
-        document.body.appendChild(this.div);
-    }
-    return Startmenu;
-}());
+});
 var Healthy = (function () {
     function Healthy() {
-        var _this = this;
         this.posX = 500;
         this.posY = 20;
         this.rightkey = 37;
@@ -43,9 +37,8 @@ var Healthy = (function () {
         document.body.appendChild(this.div);
         this.posX = (Math.random() * window.innerWidth);
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
-        requestAnimationFrame(function () { return _this.auto(); });
     }
-    Healthy.prototype.auto = function () {
+    Healthy.prototype.update = function () {
         this.posY++;
         if (this.posY == window.innerHeight) {
             document.body.removeChild(this.div);

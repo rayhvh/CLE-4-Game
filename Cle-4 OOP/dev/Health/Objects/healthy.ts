@@ -18,13 +18,11 @@ class Healthy {
         // div location
         this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
         
-        //handles animation
-        requestAnimationFrame(() => this.auto());  
     }
    
   
  
- public auto(){
+ public update(){
         this.posY++;
         // delete object when out of screen.
         if(this.posY == window.innerHeight){
