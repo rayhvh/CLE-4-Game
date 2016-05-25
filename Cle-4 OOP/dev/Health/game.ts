@@ -19,7 +19,7 @@ class Game {
                            
         //}
        
-        this.spawnFrequency = 60;
+        this.spawnFrequency = 360;
         
         this.player = new Player;
         
@@ -32,7 +32,7 @@ class Game {
      
     private spawnObject():void {
          this.Healthys.push( new Healthy() );
-         this.Apples.push( new apple() );
+        //  this.Apples.push( new apple() );
     }
     
     private gameLoop(){

@@ -3,14 +3,13 @@ var Game = (function () {
         this.Healthys = new Array();
         this.Apples = new Array();
         this.frameCounter = 0;
-        this.spawnFrequency = 60;
+        this.spawnFrequency = 360;
         this.player = new Player;
         this.utils = new Utils();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.spawnObject = function () {
         this.Healthys.push(new Healthy());
-        this.Apples.push(new apple());
     };
     Game.prototype.gameLoop = function () {
         this.frameCounter++;
@@ -69,14 +68,17 @@ var Healthy = (function () {
     Healthy.prototype.hit = function () {
         console.log("hit");
         this.count++;
+    };
+    Healthy.prototype.update = function () {
+        this.posY += 5;
         if (this.count == 1) {
             document.body.removeChild(this.div);
         }
-    };
-    Healthy.prototype.update = function () {
-        this.posY += 10;
-        if (this.posY == window.innerHeight - 200) {
-            document.body.removeChild(this.div);
+        if (this.count == 0) {
+            if (this.posY == window.innerHeight + 200) {
+                console.log("ben je er?");
+                document.body.removeChild(this.div);
+            }
         }
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
     };
@@ -107,9 +109,11 @@ var apple = (function () {
         }
     };
     apple.prototype.update = function () {
-        this.posY += 10;
-        if (this.posY == window.innerHeight - 200) {
+        this.posY += 2;
+        if (this.posY == window.innerHeight + 200) {
+            console.log("posY waarde --> " + this.posY);
             document.body.removeChild(this.div);
+            console.log("tesjes");
         }
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
     };
