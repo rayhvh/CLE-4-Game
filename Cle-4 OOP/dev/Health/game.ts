@@ -1,8 +1,11 @@
 class Game {
     
-    private player:Player;
+    private player:Player;    
     private Healthy:Healthy;
     private Healthys:Array<Healthy> = new Array<Healthy>();
+    
+    private Healthy:Apple;
+    private Apples:Array<apple> = new Array<apple>();
     
     private utils:Utils;
     
@@ -29,6 +32,7 @@ class Game {
      
     private spawnObject():void {
          this.Healthys.push( new Healthy() );
+         this.Apples.push( new apple() );
     }
     
     private gameLoop(){
@@ -47,6 +51,10 @@ class Game {
             this.Healthys[i].update();
         }
         
+        for(let i = 0;i<this.Apples.length;i++){
+            this.Apples[i].update();
+        }
+        
         this.updateElements();   
            
         // hiermee wordt de gameloop opnieuw aangeroepen
@@ -58,7 +66,7 @@ class Game {
            
             if(this.utils.hasOverlap(h, this.player)) h.hit();
             
-            h.update();
+           // h.update();
         }
         
     }
