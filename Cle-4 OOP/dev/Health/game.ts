@@ -4,6 +4,8 @@ class Game {
     private Healthy:Healthy;
     private Healthys:Array<Healthy> = new Array<Healthy>();
     
+    private utils:Utils;
+    
     private spawnFrequency:number;
     private frameCounter:number = 0;
     
@@ -18,6 +20,7 @@ class Game {
         
         this.player = new Player;
         
+        this.utils = new Utils();
         
         // start game loop      
         requestAnimationFrame(this.gameLoop.bind(this));
@@ -43,9 +46,22 @@ class Game {
         for(let i = 0;i<this.Healthys.length;i++){
             this.Healthys[i].update();
         }
-           
+        
+        this.updateElements();   
            
         // hiermee wordt de gameloop opnieuw aangeroepen
         requestAnimationFrame(this.gameLoop.bind(this));
     }
+    
+    private updateElements():void {
+        for (var h of this.Healthys) {
+           
+            if(this.utils.hasOverlap(h, this.player)) h.hit();
+            
+            h.update();
+        }
+        
+    }
+    
+    
 }

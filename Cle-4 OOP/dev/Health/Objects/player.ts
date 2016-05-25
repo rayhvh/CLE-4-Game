@@ -3,8 +3,12 @@
  */
 class Player {
     private div : HTMLElement;
-    private posX : number = window.innerWidth-130;
-    private posY : number = window.innerHeight-100;
+    
+    public posX : number;
+    public posY : number;
+    public width: number;
+    public height: number;
+    
     private speedX : number;
     private speedY : number;
     
@@ -16,14 +20,23 @@ class Player {
     constructor() {
         // make div
         this.div = document.createElement("player");
-        document.body.appendChild(this.div);
+        document.body.appendChild(this.div);       
         
-        // div location
-        this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
         
         // keyboard listeners
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
+        
+        this.startPosition();
+    }
+    
+    private startPosition(){
+        this.posX = window.innerWidth-130;
+        this.posY = window.innerHeight-100;
+        this.width = 130;
+        this.height = 110;
+        // div location
+        this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
     }
     
  

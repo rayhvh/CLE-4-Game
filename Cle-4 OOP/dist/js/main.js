@@ -4,6 +4,7 @@ var Game = (function () {
         this.frameCounter = 0;
         this.spawnFrequency = 60;
         this.player = new Player;
+        this.utils = new Utils();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.spawnObject = function () {
@@ -20,24 +21,49 @@ var Game = (function () {
         for (var i = 0; i < this.Healthys.length; i++) {
             this.Healthys[i].update();
         }
+        this.updateElements();
         requestAnimationFrame(this.gameLoop.bind(this));
+    };
+    Game.prototype.updateElements = function () {
+        for (var _i = 0, _a = this.Healthys; _i < _a.length; _i++) {
+            var h = _a[_i];
+            if (this.utils.hasOverlap(h, this.player))
+                h.hit();
+            h.update();
+        }
     };
     return Game;
 }());
 window.addEventListener("load", function () {
     new Game();
 });
+var Utils = (function () {
+    function Utils() {
+    }
+    Utils.prototype.hasOverlap = function (c1, c2) {
+        return !(c2.posX > c1.posX + c1.width || c2.posX + c2.width < c1.posX || c2.posY > c1.posY + c1.height || c2.posY + c2.height < c1.posY);
+    };
+    return Utils;
+}());
 var Healthy = (function () {
     function Healthy() {
-        this.posX = 500;
-        this.posY = 20;
         this.rightkey = 37;
         this.leftkey = 39;
         this.div = document.createElement("healthy");
         document.body.appendChild(this.div);
+        this.startPosition();
+    }
+    Healthy.prototype.startPosition = function () {
+        this.posX = 500;
+        this.posY = -50;
+        this.width = 50;
+        this.height = 50;
         this.posX = (Math.random() * window.innerWidth);
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
-    }
+    };
+    Healthy.prototype.hit = function () {
+        console.log("hit");
+    };
     Healthy.prototype.update = function () {
         this.posY++;
         if (this.posY == window.innerHeight) {
@@ -49,18 +75,23 @@ var Healthy = (function () {
 }());
 var Player = (function () {
     function Player() {
-        this.posX = window.innerWidth - 130;
-        this.posY = window.innerHeight - 100;
         this.rightkey = 37;
         this.leftkey = 39;
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.div = document.createElement("player");
         document.body.appendChild(this.div);
-        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
+        this.startPosition();
     }
+    Player.prototype.startPosition = function () {
+        this.posX = window.innerWidth - 130;
+        this.posY = window.innerHeight - 100;
+        this.width = 130;
+        this.height = 110;
+        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+    };
     Player.prototype.onKeyDown = function (event) {
         switch (event.keyCode) {
             case this.rightkey:
