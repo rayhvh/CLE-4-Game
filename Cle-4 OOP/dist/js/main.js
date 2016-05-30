@@ -3,13 +3,16 @@ var Game = (function () {
         this.Healthys = new Array();
         this.Apples = new Array();
         this.frameCounter = 0;
-        this.spawnFrequency = 360;
+        this.spawnFrequency = 180;
         this.player = new Player;
         this.utils = new Utils();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.spawnObject = function () {
         this.Healthys.push(new Healthy());
+        this.Apples.push(new Apple());
+    };
+    Game.prototype.removeObject = function () {
     };
     Game.prototype.gameLoop = function () {
         this.frameCounter++;
@@ -34,6 +37,11 @@ var Game = (function () {
             if (this.utils.hasOverlap(h, this.player))
                 h.hit();
         }
+        for (var _b = 0, _c = this.Apples; _b < _c.length; _b++) {
+            var a = _c[_b];
+            if (this.utils.hasOverlap(a, this.player))
+                a.hit();
+        }
     };
     return Game;
 }());
@@ -47,6 +55,46 @@ var Utils = (function () {
         return !(c2.posX > c1.posX + c1.width || c2.posX + c2.width < c1.posX || c2.posY > c1.posY + c1.height || c2.posY + c2.height < c1.posY);
     };
     return Utils;
+}());
+var Apple = (function () {
+    function Apple() {
+        this.rightkey = 37;
+        this.leftkey = 39;
+        this.count = 0;
+        this.div = document.createElement("apple");
+        document.body.appendChild(this.div);
+        this.startPosition();
+    }
+    Apple.prototype.startPosition = function () {
+        this.posX = 500;
+        this.posY = -50;
+        this.width = 50;
+        this.height = 50;
+        this.posX = (Math.random() * window.innerWidth);
+        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+    };
+    Apple.prototype.hit = function () {
+        console.log("hitApple");
+        this.count++;
+    };
+    Apple.prototype.update = function () {
+        this.posY += 4;
+        console.log(this.count + "countapple");
+        if (this.count == 1) {
+            document.body.removeChild(this.div);
+        }
+        if (this.count == 0) {
+            if (this.posY == window.innerHeight + 200) {
+                console.log("APPLE");
+                document.body.removeChild(this.div);
+            }
+        }
+        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+    };
+    Apple.prototype.removeFromGame = function () {
+        document.body.removeChild(this.div);
+    };
+    return Apple;
 }());
 var Healthy = (function () {
     function Healthy() {
@@ -83,41 +131,6 @@ var Healthy = (function () {
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
     };
     return Healthy;
-}());
-var apple = (function () {
-    function apple() {
-        this.rightkey = 37;
-        this.leftkey = 39;
-        this.count = 0;
-        this.div = document.createElement("apple");
-        document.body.appendChild(this.div);
-        this.startPosition();
-    }
-    apple.prototype.startPosition = function () {
-        this.posX = 500;
-        this.posY = -50;
-        this.width = 50;
-        this.height = 50;
-        this.posX = (Math.random() * window.innerWidth);
-        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
-    };
-    apple.prototype.hit = function () {
-        console.log("hit");
-        this.count++;
-        if (this.count == 1) {
-            document.body.removeChild(this.div);
-        }
-    };
-    apple.prototype.update = function () {
-        this.posY += 2;
-        if (this.posY == window.innerHeight + 200) {
-            console.log("posY waarde --> " + this.posY);
-            document.body.removeChild(this.div);
-            console.log("tesjes");
-        }
-        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
-    };
-    return apple;
 }());
 var Player = (function () {
     function Player() {

@@ -5,7 +5,7 @@ class Game {
     private Healthys:Array<Healthy> = new Array<Healthy>();
     
     private Healthy:Apple;
-    private Apples:Array<apple> = new Array<apple>();
+    private Apples:Array<Apple> = new Array<Apple>();
     
     private utils:Utils;
     
@@ -19,7 +19,7 @@ class Game {
                            
         //}
        
-        this.spawnFrequency = 360;
+        this.spawnFrequency = 180;
         
         this.player = new Player;
         
@@ -32,8 +32,15 @@ class Game {
      
     private spawnObject():void {
          this.Healthys.push( new Healthy() );
-        //  this.Apples.push( new apple() );
+         this.Apples.push( new Apple() );
     }
+    
+    private removeObject():void {
+        // remove an instance from the array
+        
+    }
+    
+    
     
     private gameLoop(){
         this.frameCounter++;
@@ -66,7 +73,12 @@ class Game {
            
             if(this.utils.hasOverlap(h, this.player)) h.hit();
             
+            
            // h.update();
+        }
+        for (var a of this.Apples) {
+           
+            if(this.utils.hasOverlap(a, this.player)) a.hit();
         }
         
     }
