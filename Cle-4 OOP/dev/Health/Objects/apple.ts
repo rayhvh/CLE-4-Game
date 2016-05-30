@@ -14,8 +14,14 @@ class Apple {
     
     private count: number = 0;
     
-    constructor() {
+    private game:Game;
+    public removeMe:boolean;
+    
+    constructor(g:Game) {
         // make div
+        this.game = g; 
+        this.removeMe = false;
+        
         this.div = document.createElement("apple");
         document.body.appendChild(this.div);
         
@@ -41,31 +47,39 @@ class Apple {
   
  
  public update(){
-        this.posY+= 4;
-        console.log(this.count + "countapple");
-        // delete object when out of screen.
+        
+        // delete object when out of screen..
         if(this.count == 1){
-            document.body.removeChild(this.div);
+            this.removeFromGame();
         }
         
-        if(this.count == 0){
-            if(this.posY == window.innerHeight+200){
-            console.log("APPLE");
-            document.body.removeChild(this.div);
-        }
+        else if(this.posY == window.innerHeight+200){  
+            console.log("erin");          
+            this.removeFromGame();        
         }
         
-        this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";  
+        else{
+            this.posY+= 5;
+            this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";  
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
+        }
         
         
     }
     
     private removeFromGame(){
-        // de div uit de dom halen
-         document.body.removeChild(this.div);
-         
-         // deze instance uit de array halen
-         // this.game.removeFromGame(this);
+        this.removeMe = true;
+        document.body.removeChild(this.div);
     }
+    
+    /*
+    private removeFromGame(){
+        // de div uit de dom halen
+        console.log("de div wehalen: " + this.div);
+        
+         // deze instance uit de array halen
+         this.game.removeObject(this);
+         document.body.removeChild(this.div);
+    }
+    */
 }

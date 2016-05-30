@@ -3,44 +3,51 @@ var Game = (function () {
         this.Healthys = new Array();
         this.Apples = new Array();
         this.frameCounter = 0;
-        this.spawnFrequency = 180;
+        this.spawnFrequency = 60;
         this.player = new Player;
         this.utils = new Utils();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.spawnObject = function () {
         this.Healthys.push(new Healthy());
-        this.Apples.push(new Apple());
-    };
-    Game.prototype.removeObject = function () {
+        this.Apples.push(new Apple(this));
     };
     Game.prototype.gameLoop = function () {
         this.frameCounter++;
         if (this.frameCounter > this.spawnFrequency) {
             this.spawnObject();
             this.frameCounter = 0;
-            console.log(this.frameCounter);
         }
         this.player.move();
-        for (var i = 0; i < this.Healthys.length; i++) {
-            this.Healthys[i].update();
-        }
-        for (var i = 0; i < this.Apples.length; i++) {
-            this.Apples[i].update();
-        }
         this.updateElements();
         requestAnimationFrame(this.gameLoop.bind(this));
     };
     Game.prototype.updateElements = function () {
         for (var _i = 0, _a = this.Healthys; _i < _a.length; _i++) {
             var h = _a[_i];
-            if (this.utils.hasOverlap(h, this.player))
-                h.hit();
+            if (h.removeMe) {
+                var i = this.Healthys.indexOf(h);
+                this.Healthys.splice(i, 1);
+                console.log("verwijder bubble " + i + " array = " + this.Healthys.length);
+            }
+            else {
+                h.update();
+                if (this.utils.hasOverlap(h, this.player))
+                    h.hit();
+            }
         }
         for (var _b = 0, _c = this.Apples; _b < _c.length; _b++) {
             var a = _c[_b];
-            if (this.utils.hasOverlap(a, this.player))
-                a.hit();
+            if (a.removeMe) {
+                var i = this.Apples.indexOf(a);
+                this.Apples.splice(i, 1);
+                console.log("verwijder appel " + i + " array = " + this.Apples.length);
+            }
+            else {
+                a.update();
+                if (this.utils.hasOverlap(a, this.player))
+                    a.hit();
+            }
         }
     };
     return Game;
@@ -57,10 +64,12 @@ var Utils = (function () {
     return Utils;
 }());
 var Apple = (function () {
-    function Apple() {
+    function Apple(g) {
         this.rightkey = 37;
         this.leftkey = 39;
         this.count = 0;
+        this.game = g;
+        this.removeMe = false;
         this.div = document.createElement("apple");
         document.body.appendChild(this.div);
         this.startPosition();
@@ -78,20 +87,20 @@ var Apple = (function () {
         this.count++;
     };
     Apple.prototype.update = function () {
-        this.posY += 4;
-        console.log(this.count + "countapple");
         if (this.count == 1) {
-            document.body.removeChild(this.div);
+            this.removeFromGame();
         }
-        if (this.count == 0) {
-            if (this.posY == window.innerHeight + 200) {
-                console.log("APPLE");
-                document.body.removeChild(this.div);
-            }
+        else if (this.posY == window.innerHeight + 200) {
+            console.log("erin");
+            this.removeFromGame();
         }
-        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        else {
+            this.posY += 5;
+            this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        }
     };
     Apple.prototype.removeFromGame = function () {
+        this.removeMe = true;
         document.body.removeChild(this.div);
     };
     return Apple;
@@ -114,21 +123,21 @@ var Healthy = (function () {
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
     };
     Healthy.prototype.hit = function () {
-        console.log("hit");
         this.count++;
     };
     Healthy.prototype.update = function () {
         this.posY += 5;
         if (this.count == 1) {
-            document.body.removeChild(this.div);
+            this.removeFromGame();
         }
-        if (this.count == 0) {
-            if (this.posY == window.innerHeight + 200) {
-                console.log("ben je er?");
-                document.body.removeChild(this.div);
-            }
+        if (this.count == 0 && this.posY == window.innerHeight + 200) {
+            this.removeFromGame();
         }
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+    };
+    Healthy.prototype.removeFromGame = function () {
+        this.removeMe = true;
+        document.body.removeChild(this.div);
     };
     return Healthy;
 }());

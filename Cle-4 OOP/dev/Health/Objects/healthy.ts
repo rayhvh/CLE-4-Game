@@ -12,6 +12,7 @@ class Healthy {
     private leftkey : number = 39;
     
     private count: number = 0;
+    public removeMe:boolean;
     
     constructor() {
         // make div
@@ -36,7 +37,7 @@ class Healthy {
    }
    
     public hit(){
-        console.log("hit");
+        
         this.count++;
         
         
@@ -47,19 +48,26 @@ class Healthy {
         this.posY+= 5;
         // delete object when out of screen.
         if(this.count == 1){
-            document.body.removeChild(this.div);
+            
+            this.removeFromGame();
         }
         
-        if(this.count == 0){
-            if(this.posY == window.innerHeight+200){
-                console.log("ben je er?");
-                document.body.removeChild(this.div);
-            }
-        }
+        if(this.count == 0 && this.posY == window.innerHeight+200){
+           
+            this.removeFromGame();
+       }
         
         this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";  
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
         
         
+    }
+       private removeFromGame(){
+        // de div uit de dom halen
+        this.removeMe = true;
+         document.body.removeChild(this.div);
+         // deze instance uit de array halen
+         
+         // this.game.removeFromGame(this);
     }
 }
