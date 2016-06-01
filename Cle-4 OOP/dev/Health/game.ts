@@ -1,3 +1,7 @@
+///// <reference path="player.ts" />
+///// <reference path="healthy.ts" />
+///// <reference path="apple.ts" />
+
 class Game {
     
     private player:Player;    
@@ -33,26 +37,25 @@ class Game {
          this.Apples.push( new Apple(this) );
     }
     
-    /*
     public removeObject(a:Apple):void {
         // remove the last instance from the array
         //this.Apples.pop();
         
         
         // zoek in de array naar a
-        // als gevonden, haal dan die instance uit de array
+        // als gevonden, haal dan die instance uit de arrays
          for (var i=0;i  <this.Apples.length; i++) {
              console.log("checking " + i  + " = " + a);
              
             if(this.Apples[i] == a){
                 console.log("gevonden, verwijder " + i);
+                
             }
         }
         
         console.log("aantal apples is "+ this.Apples.length);
         
     }
-    */
     
     private gameLoop(){
         this.frameCounter++;
@@ -69,41 +72,14 @@ class Game {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     
-    
     private updateElements():void {
         for (var h of this.Healthys) {
-            if(h.removeMe){
-                // deze appel moet uit het spel
-                // verwijder uit array
-                // this.Apples.remove(a);
-                var i = this.Healthys.indexOf(h);
-               
-                this.Healthys.splice(i,1);
-                
-                 console.log("verwijder bubble " + i + " array = "  + this.Healthys.length);
-            } else {
-            
-            
-                h.update();
-                if(this.utils.hasOverlap(h, this.player)) h.hit();
-            }
+            h.update();
+           // if(this.utils.hasOverlap(h, this.player)) h.hit();
         }
         for (var a of this.Apples) {
-            if(a.removeMe){
-                // deze appel moet uit het spel
-                // verwijder uit array
-                // this.Apples.remove(a);
-                var i = this.Apples.indexOf(a);
-               
-                this.Apples.splice(i,1);
-                
-                 console.log("verwijder appel " + i + " array = "  + this.Apples.length);
-            } else {
-            
-            
-                a.update();
-                if(this.utils.hasOverlap(a, this.player)) a.hit();
-            }
+            a.update();
+            if(this.utils.hasOverlap(a, this.player)) a.hit();
         }
     }
 }
