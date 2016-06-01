@@ -1,6 +1,8 @@
-///// <reference path="player.ts" />
-///// <reference path="healthy.ts" />
-///// <reference path="apple.ts" />
+/// <reference path="objects/player.ts" />
+/// <reference path="objects/healthy.ts" />
+/// <reference path="objects/apple.ts" />
+/// <reference path="../utils.ts" />
+
 
 class Game {
     
@@ -17,11 +19,6 @@ class Game {
     private frameCounter:number = 0;
     
     constructor() {
-        //
-        //for(let i=0;i<10;i++){
-        //        this.Healthys.push( new Healthy() );
-                           
-        //}
        
         this.spawnFrequency = 60;
         this.player = new Player;
@@ -29,32 +26,11 @@ class Game {
         
         // start game loop      
         requestAnimationFrame(this.gameLoop.bind(this));
-        
     }
      
     private spawnObject():void {
          this.Healthys.push( new Healthy() );
          this.Apples.push( new Apple(this) );
-    }
-    
-    public removeObject(a:Apple):void {
-        // remove the last instance from the array
-        //this.Apples.pop();
-        
-        
-        // zoek in de array naar a
-        // als gevonden, haal dan die instance uit de arrays
-         for (var i=0;i  <this.Apples.length; i++) {
-             console.log("checking " + i  + " = " + a);
-             
-            if(this.Apples[i] == a){
-                console.log("gevonden, verwijder " + i);
-                
-            }
-        }
-        
-        console.log("aantal apples is "+ this.Apples.length);
-        
     }
     
     private gameLoop(){
@@ -72,14 +48,40 @@ class Game {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     
+    
     private updateElements():void {
+        
         for (var h of this.Healthys) {
-            h.update();
-           // if(this.utils.hasOverlap(h, this.player)) h.hit();
+            if(h.removeMe){
+                // deze appel moet uit het speld
+                // verwijder uit array
+                // this.Apples.remove(a);
+                var i = this.Healthys.indexOf(h);
+               
+                this.Healthys.splice(i,1);
+                
+                 console.log("verwijder bubble " + i + " array = "  + this.Healthys.length);
+            } else {            
+                h.update();
+                if(this.utils.hasOverlap(h, this.player)) h.hit();
+            }
         }
+        
         for (var a of this.Apples) {
-            a.update();
-            if(this.utils.hasOverlap(a, this.player)) a.hit();
+            if(a.removeMe){
+                // deze appel moet uit het spel
+                // verwijder uit array
+                // this.Apples.remove(a);
+                var i = this.Apples.indexOf(a);
+               
+                this.Apples.splice(i,1);
+                
+                 console.log("verwijder appel " + i + " array = "  + this.Apples.length);
+            } else {      
+                a.update();
+                if(this.utils.hasOverlap(a, this.player)) a.hit();
+            }
         }
     }
+    
 }

@@ -1,44 +1,22 @@
+/// <reference path="../../gameobject.ts" />
 
-/**
- * name
- */
-class Apple {
-    private div : HTMLElement;
-    public posX : number;
-    public posY : number;
-    public width: number;
-    public height: number;
-       
-    private rightkey : number = 37;
-    private leftkey : number = 39;
+class Apple extends GameObject {
     
     private count: number = 0;
-    
     private game:Game;
     public removeMe:boolean;
     
     constructor(g:Game) {
+        super("apple");
+        this.changeDivBackground("apple.png")
         // make div
         this.game = g; 
         this.removeMe = false;
         
-        this.div = document.createElement("apple");
-        document.body.appendChild(this.div);
-        
-        this.startPosition();
-        
+        this.startPosition((Math.random() * window.innerWidth),-50,50,50);
+                
     }
    
-   startPosition(){
-       this.posX = 500;
-       this.posY = -50;
-       this.width = 50;
-       this.height =50;
-       
-       this.posX = (Math.random() * window.innerWidth); 
-        // div location
-        this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
-   }
    
     public hit(){
         console.log("hitApple");
@@ -64,7 +42,6 @@ class Apple {
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
         }
         
-        
     }
     
     private removeFromGame(){
@@ -72,14 +49,4 @@ class Apple {
         document.body.removeChild(this.div);
     }
     
-    /*
-    private removeFromGame(){
-        // de div uit de dom halen
-        console.log("de div wehalen: " + this.div);
-        
-         // deze instance uit de array halen
-         this.game.removeObject(this);
-         document.body.removeChild(this.div);
-    }
-    */
 }
