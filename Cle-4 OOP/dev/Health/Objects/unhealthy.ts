@@ -1,17 +1,17 @@
 /// <reference path="../../gameobject.ts" />
 
-class Apple extends GameObject {
+class UnHealthy extends GameObject {
     
     private count: number = 0;
     private game:Game;
     public removeMe:boolean;
     
-    constructor(g:Game) {
-        super("apple");
-        this.changeDivBackground("apple.png")
+    constructor() {
+        super("unhealthy");
+        this.changeDivBackground("bubble.png")
         // make div
-        this.game = g; 
-        this.removeMe = false;
+        // this.game = g; 
+        // this.removeMe = false;
         
         this.startPosition((Math.random() * window.innerWidth),-50,50,50);
                 
@@ -19,7 +19,7 @@ class Apple extends GameObject {
    
    
     public hit(){
-        console.log("hitApple");
+        console.log("hitBubble");
         this.count++;
     }
   
@@ -31,8 +31,8 @@ class Apple extends GameObject {
             this.removeFromGame();
         }
         
-        else if(this.posY == window.innerHeight+200){  
-            console.log("erin");          
+        else if(this.posY > window.innerHeight+200){  
+            console.log("Unhealthy");          
             this.removeFromGame();        
         }
         

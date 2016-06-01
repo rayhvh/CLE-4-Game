@@ -7,31 +7,32 @@ class Healthy extends GameObject {
 
     constructor() {
         super("healthy");
-        this.changeDivBackground("bubble.png");
+        this.changeDivBackground("apple.png");
         this.startPosition((Math.random() * window.innerWidth),-50,50,50);
     }
    
     public hit(){
-    this.count++;       
+        console.log("HITappple");
+        this.count++;       
     }
   
  
     public update(){
-            this.posY+= 5;
-            // delete object when out of screen.
-            if(this.count == 1){
-                
-                this.removeFromGame();
-            }
-            
-            if(this.count == 0 && this.posY == window.innerHeight+200){
-            
-                this.removeFromGame();
+    // delete object when out of screen..
+        if(this.count == 1){
+            this.removeFromGame();
         }
-            
+        
+        else if(this.posY > window.innerHeight+200){  
+            console.log("Healthy");          
+            this.removeFromGame();        
+        }
+        
+        else{
+            this.posY+= 5;
             this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";  
-            // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
-            
+        // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
+        }
             
         }
     private removeFromGame(){

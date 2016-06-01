@@ -19,18 +19,7 @@ class Player extends GameObject {
         
         this.changeDivBackground("fish.png");
         this.startPosition(window.innerWidth -130,window.innerHeight -100,130,100);
-    }
-    
-    
-    // private startPosition(){
-    //     this.posX = window.innerWidth-130;
-    //     this.posY = window.innerHeight-100;
-    //     this.width = 130;
-    //     this.height = 100;
-    //     // div location
-    //     this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
-    // }
-    
+    }  
  
    // keyboard input zorgt dat de snelheid wordt aangepast
     private onKeyDown(event:KeyboardEvent):void {
@@ -55,8 +44,7 @@ class Player extends GameObject {
             break;
         }
     }
-  
- 
+   
  public move(){
         this.posX = this.posX - this.upSpeed + this.downSpeed;
                         

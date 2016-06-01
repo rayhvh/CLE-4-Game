@@ -35,11 +35,11 @@ titlepic{
 	 animation: fishanimation 4s ease-in-out infinite alternate;
 }
 
-bubble {
+unhealthy {
     
     width:55px; height: 55px;
-    left:50vw;
-    animation: bubbleup 3s linear infinite;
+    /*left:50vw;*/
+    /*animation: bubbleup 3s linear infinite;*/
 }
 
 healthy{

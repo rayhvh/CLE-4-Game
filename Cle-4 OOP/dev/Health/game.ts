@@ -1,6 +1,6 @@
 /// <reference path="objects/player.ts" />
 /// <reference path="objects/healthy.ts" />
-/// <reference path="objects/apple.ts" />
+/// <reference path="objects/unhealthy.ts" />
 /// <reference path="../utils.ts" />
 
 
@@ -10,8 +10,8 @@ class Game {
     private Healthy:Healthy;
     private Healthys:Array<Healthy> = new Array<Healthy>();
     
-    private Apple:Apple;
-    private Apples:Array<Apple> = new Array<Apple>();
+    private UnHealthy:UnHealthy;
+    private UnHealthys:Array<UnHealthy> = new Array<UnHealthy>();
     
     private utils:Utils;
     
@@ -30,7 +30,7 @@ class Game {
      
     private spawnObject():void {
          this.Healthys.push( new Healthy() );
-         this.Apples.push( new Apple(this) );
+         this.UnHealthys.push( new UnHealthy() );
     }
     
     private gameLoop(){
@@ -60,26 +60,27 @@ class Game {
                
                 this.Healthys.splice(i,1);
                 
-                 console.log("verwijder bubble " + i + " array = "  + this.Healthys.length);
+                 console.log("verwijder apple " + i + " array = "  + this.Healthys.length);
             } else {            
                 h.update();
                 if(this.utils.hasOverlap(h, this.player)) h.hit();
             }
         }
         
-        for (var a of this.Apples) {
-            if(a.removeMe){
+        for (var u of this.UnHealthys) {
+            if(u.removeMe){
                 // deze appel moet uit het spel
                 // verwijder uit array
                 // this.Apples.remove(a);
-                var i = this.Apples.indexOf(a);
+                var i = this.UnHealthys.indexOf(u);
                
-                this.Apples.splice(i,1);
+                this.UnHealthys.splice(i,1);
                 
-                 console.log("verwijder appel " + i + " array = "  + this.Apples.length);
+                 console.log("verwijder bubble " + i + " array = "  + this.UnHealthys.length);
             } else {      
-                a.update();
-                if(this.utils.hasOverlap(a, this.player)) a.hit();
+                u.update();
+                if(this.utils.hasOverlap(u, this.player)) 
+                    u.hit();
             }
         }
     }
