@@ -5,6 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var GameObject = (function () {
     function GameObject(tagname) {
+        this.count = 0;
         this.div = document.createElement(tagname);
         document.body.appendChild(this.div);
     }
@@ -18,6 +19,26 @@ var GameObject = (function () {
         this.width = width;
         this.height = height;
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+    };
+    GameObject.prototype.hit = function (object) {
+        this.count++;
+        console.log("Optellen " + this.count);
+    };
+    GameObject.prototype.update = function () {
+        if (this.count == 1) {
+            this.removeFromGame();
+        }
+        else if (this.posY > window.innerHeight + 200) {
+            this.removeFromGame();
+        }
+        else {
+            this.posY += 5;
+            this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        }
+    };
+    GameObject.prototype.removeFromGame = function () {
+        this.removeMe = true;
+        document.body.removeChild(this.div);
     };
     return GameObject;
 }());
@@ -64,30 +85,12 @@ var Healthy = (function (_super) {
     __extends(Healthy, _super);
     function Healthy() {
         _super.call(this, "healthy");
-        this.count = 0;
-        this.changeDivBackground("apple.png");
+        this.images = ["healthy/apple.png", "healthy/carrot.jpg"];
+        this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
     }
     Healthy.prototype.hit = function () {
-        console.log("HITappple");
-        this.count++;
-    };
-    Healthy.prototype.update = function () {
-        if (this.count == 1) {
-            this.removeFromGame();
-        }
-        else if (this.posY > window.innerHeight + 200) {
-            console.log("Healthy");
-            this.removeFromGame();
-        }
-        else {
-            this.posY += 5;
-            this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
-        }
-    };
-    Healthy.prototype.removeFromGame = function () {
-        this.removeMe = true;
-        document.body.removeChild(this.div);
+        _super.prototype.hit.call(this);
     };
     return Healthy;
 }(GameObject));
@@ -95,30 +98,11 @@ var UnHealthy = (function (_super) {
     __extends(UnHealthy, _super);
     function UnHealthy() {
         _super.call(this, "unhealthy");
-        this.count = 0;
-        this.changeDivBackground("bubble.png");
+        this.changeDivBackground("unhealthy/bubble.png");
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
     }
     UnHealthy.prototype.hit = function () {
-        console.log("hitBubble");
-        this.count++;
-    };
-    UnHealthy.prototype.update = function () {
-        if (this.count == 1) {
-            this.removeFromGame();
-        }
-        else if (this.posY > window.innerHeight + 200) {
-            console.log("Unhealthy");
-            this.removeFromGame();
-        }
-        else {
-            this.posY += 5;
-            this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
-        }
-    };
-    UnHealthy.prototype.removeFromGame = function () {
-        this.removeMe = true;
-        document.body.removeChild(this.div);
+        _super.prototype.hit.call(this);
     };
     return UnHealthy;
 }(GameObject));
@@ -130,6 +114,27 @@ var Utils = (function () {
     };
     return Utils;
 }());
+var ScoreDisplay = (function (_super) {
+    __extends(ScoreDisplay, _super);
+    function ScoreDisplay() {
+        _super.call(this, "score");
+        this.score = 0;
+        console.log("Creating display");
+    }
+    ScoreDisplay.prototype.update = function () {
+        console.log("Update de score display");
+        this.div.innerHTML = "Score: " + this.score;
+    };
+    ScoreDisplay.prototype.scoreUp = function () {
+        console.log("omhoog");
+        this.score++;
+    };
+    ScoreDisplay.prototype.scoreDown = function () {
+        console.log("omlaag");
+        this.score--;
+    };
+    return ScoreDisplay;
+}(GameObject));
 var Game = (function () {
     function Game() {
         this.Healthys = new Array();
@@ -138,6 +143,7 @@ var Game = (function () {
         this.spawnFrequency = 60;
         this.player = new Player;
         this.utils = new Utils();
+        this.scoreDisplay = new ScoreDisplay();
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.spawnObject = function () {
@@ -152,6 +158,7 @@ var Game = (function () {
         }
         this.player.move();
         this.updateElements();
+        this.scoreDisplay.update();
         requestAnimationFrame(this.gameLoop.bind(this));
     };
     Game.prototype.updateElements = function () {
@@ -160,12 +167,13 @@ var Game = (function () {
             if (h.removeMe) {
                 var i = this.Healthys.indexOf(h);
                 this.Healthys.splice(i, 1);
-                console.log("verwijder apple " + i + " array = " + this.Healthys.length);
             }
             else {
                 h.update();
-                if (this.utils.hasOverlap(h, this.player))
+                if (this.utils.hasOverlap(h, this.player)) {
                     h.hit();
+                    this.scoreDisplay.scoreUp();
+                }
             }
         }
         for (var _b = 0, _c = this.UnHealthys; _b < _c.length; _b++) {
@@ -173,12 +181,13 @@ var Game = (function () {
             if (u.removeMe) {
                 var i = this.UnHealthys.indexOf(u);
                 this.UnHealthys.splice(i, 1);
-                console.log("verwijder bubble " + i + " array = " + this.UnHealthys.length);
             }
             else {
                 u.update();
-                if (this.utils.hasOverlap(u, this.player))
+                if (this.utils.hasOverlap(u, this.player)) {
                     u.hit();
+                    this.scoreDisplay.scoreDown();
+                }
             }
         }
     };

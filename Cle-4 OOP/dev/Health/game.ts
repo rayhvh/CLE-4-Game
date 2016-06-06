@@ -2,11 +2,14 @@
 /// <reference path="objects/healthy.ts" />
 /// <reference path="objects/unhealthy.ts" />
 /// <reference path="../utils.ts" />
+/// <reference path="../scoredisplay.ts" />
+
 
 
 class Game {
     
-    private player:Player;    
+    private player:Player;
+    private scoreDisplay:ScoreDisplay;    
     private Healthy:Healthy;
     private Healthys:Array<Healthy> = new Array<Healthy>();
     
@@ -23,6 +26,8 @@ class Game {
         this.spawnFrequency = 60;
         this.player = new Player;
         this.utils = new Utils();
+        this.scoreDisplay = new ScoreDisplay();
+        
         
         // start game loop      
         requestAnimationFrame(this.gameLoop.bind(this));
@@ -43,6 +48,7 @@ class Game {
         // roep hier de move functie van de bal aan
         this.player.move();
         this.updateElements();   
+        this.scoreDisplay.update();
            
         // hiermee wordt de gameloop opnieuw aangeroepen
         requestAnimationFrame(this.gameLoop.bind(this));
@@ -60,10 +66,14 @@ class Game {
                
                 this.Healthys.splice(i,1);
                 
-                 console.log("verwijder apple " + i + " array = "  + this.Healthys.length);
+                 // console.log("verwijder apple " + i + " array = "  + this.Healthys.length);
             } else {            
                 h.update();
-                if(this.utils.hasOverlap(h, this.player)) h.hit();
+                if(this.utils.hasOverlap(h, this.player)) {
+                    h.hit();
+                    // de score display aanroepen
+                    this.scoreDisplay.scoreUp();
+                }
             }
         }
         
@@ -76,11 +86,14 @@ class Game {
                
                 this.UnHealthys.splice(i,1);
                 
-                 console.log("verwijder bubble " + i + " array = "  + this.UnHealthys.length);
+                 // console.log("verwijder bubble " + i + " array = "  + this.UnHealthys.length);
             } else {      
                 u.update();
-                if(this.utils.hasOverlap(u, this.player)) 
-                    u.hit();
+                if(this.utils.hasOverlap(u, this.player)){
+                   u.hit(); 
+                   // de score display aanroepen
+                    this.scoreDisplay.scoreDown();
+                } 
             }
         }
     }
