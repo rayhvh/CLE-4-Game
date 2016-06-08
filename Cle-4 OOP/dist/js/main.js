@@ -63,10 +63,10 @@ var Player = (function (_super) {
     Player.prototype.onKeyDown = function (event) {
         switch (event.keyCode) {
             case this.rightkey:
-                this.upSpeed = 5;
+                this.upSpeed = 20;
                 break;
             case this.leftkey:
-                this.downSpeed = 5;
+                this.downSpeed = 20;
                 break;
         }
     };
@@ -205,8 +205,8 @@ var Game = (function () {
         var speed = 0;
         console.log(currentScore);
         if (currentScore > 4) {
-            speed += 5;
-            this.spawnFrequency = 10;
+            speed += 50;
+            this.spawnFrequency = 1;
         }
         else {
             speed += 5;
@@ -217,6 +217,5 @@ var Game = (function () {
     return Game;
 }());
 window.addEventListener("load", function () {
-    new Game();
 });
 //# sourceMappingURL=main.js.map

@@ -25,10 +25,10 @@ class Player extends GameObject {
     private onKeyDown(event:KeyboardEvent):void {
         switch(event.keyCode){
         case this.rightkey:
-            this.upSpeed = 5;
+            this.upSpeed = 20;
             break;
         case this.leftkey:
-            this.downSpeed = 5;
+            this.downSpeed = 20;
             break;
         }
     }

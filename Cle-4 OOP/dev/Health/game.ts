@@ -106,8 +106,8 @@ class Game {
         let speed:number = 0;
         console.log(currentScore);
         if(currentScore > 4){
-            speed+= 5;
-            this.spawnFrequency = 10;
+            speed+= 50;
+            this.spawnFrequency = 1;
         }
         else{
             speed+= 5;
