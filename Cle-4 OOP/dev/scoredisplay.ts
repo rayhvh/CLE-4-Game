@@ -5,8 +5,8 @@ class ScoreDisplay extends GameObject {
     
     private score: number = 0;
     private divs: HTMLElement;
-    constructor() {
-        super("score");
+    constructor(g:Game) {
+        super("score", g);
         console.log("Creating display");
         
         
@@ -24,4 +24,8 @@ class ScoreDisplay extends GameObject {
         console.log("omlaag");
         this.score--;
     }
+    public giveScore(){
+        return this.score;
+    }
+
 }

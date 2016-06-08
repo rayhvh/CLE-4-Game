@@ -4,8 +4,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var GameObject = (function () {
-    function GameObject(tagname) {
+    function GameObject(tagname, g) {
         this.count = 0;
+        this.scores = 0;
+        this.game = g;
         this.div = document.createElement(tagname);
         document.body.appendChild(this.div);
     }
@@ -25,6 +27,7 @@ var GameObject = (function () {
         console.log("Optellen " + this.count);
     };
     GameObject.prototype.update = function () {
+        var speed = 0;
         if (this.count == 1) {
             this.removeFromGame();
         }
@@ -32,7 +35,9 @@ var GameObject = (function () {
             this.removeFromGame();
         }
         else {
-            this.difficulty();
+            speed = this.game.difficulty();
+            console.log(speed);
+            this.posY += speed;
             this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         }
     };
@@ -40,15 +45,12 @@ var GameObject = (function () {
         this.removeMe = true;
         document.body.removeChild(this.div);
     };
-    GameObject.prototype.difficulty = function () {
-        this.posY += 5;
-    };
     return GameObject;
 }());
 var Player = (function (_super) {
     __extends(Player, _super);
-    function Player() {
-        _super.call(this, "player");
+    function Player(g) {
+        _super.call(this, "player", g);
         this.rightkey = 37;
         this.leftkey = 39;
         this.downSpeed = 0;
@@ -86,8 +88,8 @@ var Player = (function (_super) {
 }(GameObject));
 var Healthy = (function (_super) {
     __extends(Healthy, _super);
-    function Healthy() {
-        _super.call(this, "healthy");
+    function Healthy(g) {
+        _super.call(this, "healthy", g);
         this.images = ["healthy/apple2.png", "healthy/banana1.png", "healthy/Orange_1.png"];
         this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
@@ -99,8 +101,8 @@ var Healthy = (function (_super) {
 }(GameObject));
 var UnHealthy = (function (_super) {
     __extends(UnHealthy, _super);
-    function UnHealthy() {
-        _super.call(this, "unhealthy");
+    function UnHealthy(g) {
+        _super.call(this, "unhealthy", g);
         this.images = ["unhealthy/poison1.png", "unhealthy/spider1.png", "unhealthy/Ultrapoison.png", "unhealthy/bubble.png"];
         this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
@@ -120,8 +122,8 @@ var Utils = (function () {
 }());
 var ScoreDisplay = (function (_super) {
     __extends(ScoreDisplay, _super);
-    function ScoreDisplay() {
-        _super.call(this, "score");
+    function ScoreDisplay(g) {
+        _super.call(this, "score", g);
         this.score = 0;
         console.log("Creating display");
     }
@@ -137,6 +139,9 @@ var ScoreDisplay = (function (_super) {
         console.log("omlaag");
         this.score--;
     };
+    ScoreDisplay.prototype.giveScore = function () {
+        return this.score;
+    };
     return ScoreDisplay;
 }(GameObject));
 var Game = (function () {
@@ -145,14 +150,14 @@ var Game = (function () {
         this.UnHealthys = new Array();
         this.frameCounter = 0;
         this.spawnFrequency = 60;
-        this.player = new Player;
+        this.player = new Player(this);
         this.utils = new Utils();
-        this.scoreDisplay = new ScoreDisplay();
+        this.scoreDisplay = new ScoreDisplay(this);
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.spawnObject = function () {
-        this.Healthys.push(new Healthy());
-        this.UnHealthys.push(new UnHealthy());
+        this.Healthys.push(new Healthy(this));
+        this.UnHealthys.push(new UnHealthy(this));
     };
     Game.prototype.gameLoop = function () {
         this.frameCounter++;
@@ -194,6 +199,20 @@ var Game = (function () {
                 }
             }
         }
+    };
+    Game.prototype.difficulty = function () {
+        var currentScore = this.scoreDisplay.giveScore();
+        var speed = 0;
+        console.log(currentScore);
+        if (currentScore > 4) {
+            speed += 5;
+            this.spawnFrequency = 10;
+        }
+        else {
+            speed += 5;
+            this.spawnFrequency = 60;
+        }
+        return speed;
     };
     return Game;
 }());

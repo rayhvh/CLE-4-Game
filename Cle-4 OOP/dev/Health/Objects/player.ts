@@ -10,8 +10,8 @@ class Player extends GameObject {
     private downSpeed : number = 0;
     private upSpeed : number = 0;
     
-    constructor() {
-        super("player");       
+    constructor(g:Game) {
+        super("player", g);       
         
         // keyboard listeners
         window.addEventListener("keydown", this.onKeyDown.bind(this));

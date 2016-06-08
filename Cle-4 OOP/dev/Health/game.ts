@@ -9,7 +9,6 @@
 class Game {
     
     private player:Player;
-    private scoreDisplay:ScoreDisplay;    
     private Healthy:Healthy;
     private Healthys:Array<Healthy> = new Array<Healthy>();
     
@@ -18,24 +17,27 @@ class Game {
     
     private utils:Utils;
     
-    private spawnFrequency:number;
+    public spawnFrequency:number;
     private frameCounter:number = 0;
-    
+
+    public scoreDisplay:ScoreDisplay;    
+
     constructor() {
-       
-        this.spawnFrequency = 60;
-        this.player = new Player;
+        // this.spawnFrequency = this.Healthy.difficulty();
+        this.spawnFrequency = 60;  
+
+        this.player = new Player(this);
         this.utils = new Utils();
-        this.scoreDisplay = new ScoreDisplay();
-        
+        this.scoreDisplay = new ScoreDisplay(this);
         
         // start game loop      
         requestAnimationFrame(this.gameLoop.bind(this));
     }
      
     private spawnObject():void {
-         this.Healthys.push( new Healthy() );
-         this.UnHealthys.push( new UnHealthy() );
+         this.Healthys.push( new Healthy(this) );
+         this.UnHealthys.push( new UnHealthy(this) );
+            
     }
     
     private gameLoop(){
@@ -96,6 +98,24 @@ class Game {
                 } 
             }
         }
+    }
+
+        public difficulty(){
+        // change fall speed of objects
+        let currentScore = this.scoreDisplay.giveScore();
+        let speed:number = 0;
+        console.log(currentScore);
+        if(currentScore > 4){
+            speed+= 5;
+            this.spawnFrequency = 10;
+        }
+        else{
+            speed+= 5;
+            this.spawnFrequency = 60;
+        }
+        return speed;
+        
+     
     }
     
 }
