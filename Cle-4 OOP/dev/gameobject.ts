@@ -9,8 +9,6 @@ class GameObject {
     public width: number;
     public height: number;
     
-    //protected score: number = 0;
-    
     protected bgImage:string;
     
     private count: number = 0;
@@ -40,22 +38,7 @@ class GameObject {
         this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
    }
    
-      public hit(object:string){
-        //this.object = object;
-        // moet naar healthy.ts
-        /*
-        if(object == "Healthy"){
-            console.log("Score++");
-            this.score++;
-            
-        }
-        // unhealthy.ts
-        else if(object == "UnHealthy"){
-            console.log("Score--");
-            this.score--;
-        }
-        */
-        
+      public hit(){        
         this.count++;
         console.log("Optellen " + this.count);
     }
@@ -77,7 +60,7 @@ class GameObject {
         }
         
         else{
-            this.posY+= 5;
+            this.difficulty();
             this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";  
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
         }
@@ -87,6 +70,12 @@ class GameObject {
     private removeFromGame(){
         this.removeMe = true;
         document.body.removeChild(this.div);
+    }
+
+    private difficulty(){
+        // change fall speed of objects
+        this.posY+= 5;
+    
     }
    
 }

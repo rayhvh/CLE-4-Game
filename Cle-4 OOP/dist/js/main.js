@@ -20,7 +20,7 @@ var GameObject = (function () {
         this.height = height;
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
     };
-    GameObject.prototype.hit = function (object) {
+    GameObject.prototype.hit = function () {
         this.count++;
         console.log("Optellen " + this.count);
     };
@@ -32,13 +32,16 @@ var GameObject = (function () {
             this.removeFromGame();
         }
         else {
-            this.posY += 5;
+            this.difficulty();
             this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         }
     };
     GameObject.prototype.removeFromGame = function () {
         this.removeMe = true;
         document.body.removeChild(this.div);
+    };
+    GameObject.prototype.difficulty = function () {
+        this.posY += 5;
     };
     return GameObject;
 }());
@@ -85,7 +88,7 @@ var Healthy = (function (_super) {
     __extends(Healthy, _super);
     function Healthy() {
         _super.call(this, "healthy");
-        this.images = ["healthy/apple.png", "healthy/carrot.jpg"];
+        this.images = ["healthy/apple2.png", "healthy/banana1.png", "healthy/Orange_1.png"];
         this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
     }
@@ -98,7 +101,8 @@ var UnHealthy = (function (_super) {
     __extends(UnHealthy, _super);
     function UnHealthy() {
         _super.call(this, "unhealthy");
-        this.changeDivBackground("unhealthy/bubble.png");
+        this.images = ["unhealthy/poison1.png", "unhealthy/spider1.png", "unhealthy/Ultrapoison.png", "unhealthy/bubble.png"];
+        this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
     }
     UnHealthy.prototype.hit = function () {

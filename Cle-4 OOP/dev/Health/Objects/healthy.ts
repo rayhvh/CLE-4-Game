@@ -1,7 +1,7 @@
 /// <reference path="../../gameobject.ts" />
 class Healthy extends GameObject {
     
-    private images = ["healthy/apple.png", "healthy/carrot.jpg" ];
+    private images = ["healthy/apple2.png", "healthy/banana1.png","healthy/Orange_1.png" ];
 
     constructor() {
         super("healthy");
