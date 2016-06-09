@@ -67,6 +67,9 @@ Start{
 	width:264px; height: 93px;
 }
 
-
+score {
+    color: white;
+    font-size: 100px;
+}
 
 

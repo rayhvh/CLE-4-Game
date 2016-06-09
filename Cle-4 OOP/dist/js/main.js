@@ -217,5 +217,6 @@ var Game = (function () {
     return Game;
 }());
 window.addEventListener("load", function () {
+    new Game();
 });
 //# sourceMappingURL=main.js.map
