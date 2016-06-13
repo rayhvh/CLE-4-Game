@@ -90,3 +90,7 @@ gameover {
     width: 1024px;
     height: 488px;
 }
+
+script {
+    display: none;
+}

@@ -19,7 +19,7 @@ class Player extends GameObject {
         window.addEventListener("keyup", this.onKeyUp.bind(this));
         
         this.changeDivBackground("fish.png");
-        this.startPosition(window.innerWidth -130,window.innerHeight -100,130,100);
+        this.startPosition(window.innerWidth -130,window.innerHeight -150,130,100);
     }  
  
    // keyboard input zorgt dat de snelheid wordt aangepast

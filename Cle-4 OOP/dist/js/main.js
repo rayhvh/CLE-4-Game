@@ -61,7 +61,7 @@ var Player = (function (_super) {
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
         this.changeDivBackground("fish.png");
-        this.startPosition(window.innerWidth - 130, window.innerHeight - 100, 130, 100);
+        this.startPosition(window.innerWidth - 130, window.innerHeight - 150, 130, 100);
     }
     Player.prototype.onKeyDown = function (event) {
         switch (event.keyCode) {
