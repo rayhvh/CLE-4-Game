@@ -36,8 +36,8 @@ class ScoreDisplay extends GameObject {
     }
      public scoreDown(){
        
-        // haal 10 van score af zodat het wat slomer wordt en zorgt ervoor dat die niet onder de 0 kan raken.
-        this.score -= 10;
+        // haal 5 van score af zodat het wat slomer wordt en zorgt ervoor dat die niet onder de 0 kan raken.
+        this.score -= 5;
         if (this.score < 0)  {this.score = 0}
         this.game.lifesleft -= 1;
        if (this.game.lifesleft < 3)
@@ -45,7 +45,7 @@ class ScoreDisplay extends GameObject {
             this.lifes[this.game.lifesleft].removeMe();
             this.lifes.splice(this.game.lifesleft,1)
         }
-          
+
     }
     public giveScore(){
         return this.score;

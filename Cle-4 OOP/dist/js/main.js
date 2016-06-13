@@ -109,7 +109,7 @@ var UnHealthy = (function (_super) {
     __extends(UnHealthy, _super);
     function UnHealthy(g) {
         _super.call(this, "unhealthy", g);
-        this.images = ["unhealthy/poison1.png", "unhealthy/spider1.png", "unhealthy/Ultrapoison.png", "unhealthy/bubble.png"];
+        this.images = ["unhealthy/poison1.png", "unhealthy/spider1.png", "unhealthy/Ultrapoison.png", "unhealthy/bomb.png"];
         this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
         this.speed = this.game.difficulty();
@@ -166,7 +166,7 @@ var ScoreDisplay = (function (_super) {
         this.score++;
     };
     ScoreDisplay.prototype.scoreDown = function () {
-        this.score -= 10;
+        this.score -= 5;
         if (this.score < 0) {
             this.score = 0;
         }

@@ -2,7 +2,7 @@
 
 class UnHealthy extends GameObject { 
     
-    private images = ["unhealthy/poison1.png", "unhealthy/spider1.png","unhealthy/Ultrapoison.png", "unhealthy/bubble.png" ];
+    private images = ["unhealthy/poison1.png", "unhealthy/spider1.png","unhealthy/Ultrapoison.png", "unhealthy/bomb.png" ];
     
     constructor(g:Game) {
         super("unhealthy",g);
