@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var GameObject = (function () {
     function GameObject(tagname, g) {
-        this.count = 0;
+        this.speed = 0;
         this.scores = 0;
         this.game = g;
         this.div = document.createElement(tagname);
@@ -23,21 +23,14 @@ var GameObject = (function () {
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
     };
     GameObject.prototype.hit = function () {
-        this.count++;
-        console.log("Optellen " + this.count);
+        this.removeFromGame();
     };
     GameObject.prototype.update = function () {
-        var speed = 0;
-        if (this.count == 1) {
-            this.removeFromGame();
-        }
-        else if (this.posY > window.innerHeight + 200) {
+        if (this.posY > window.innerHeight + 200) {
             this.removeFromGame();
         }
         else {
-            speed = this.game.difficulty();
-            console.log(speed);
-            this.posY += speed;
+            this.posY += this.speed;
             this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         }
     };
@@ -47,6 +40,15 @@ var GameObject = (function () {
     };
     return GameObject;
 }());
+var GameOver = (function (_super) {
+    __extends(GameOver, _super);
+    function GameOver(g) {
+        _super.call(this, "gameover", g);
+        this.changeDivBackground("gameover.png");
+        this.startPosition((window.innerWidth / 2 - 512), (window.innerHeight / 2 - 244), 1024, 488);
+    }
+    return GameOver;
+}(GameObject));
 var Player = (function (_super) {
     __extends(Player, _super);
     function Player(g) {
@@ -55,6 +57,7 @@ var Player = (function (_super) {
         this.leftkey = 39;
         this.downSpeed = 0;
         this.upSpeed = 0;
+        this.flip = 1;
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
         this.changeDivBackground("fish.png");
@@ -63,10 +66,12 @@ var Player = (function (_super) {
     Player.prototype.onKeyDown = function (event) {
         switch (event.keyCode) {
             case this.rightkey:
-                this.upSpeed = 20;
+                this.upSpeed = 25;
+                this.flip = 1;
                 break;
             case this.leftkey:
-                this.downSpeed = 20;
+                this.downSpeed = 25;
+                this.flip = -1;
                 break;
         }
     };
@@ -82,7 +87,7 @@ var Player = (function (_super) {
     };
     Player.prototype.move = function () {
         this.posX = this.posX - this.upSpeed + this.downSpeed;
-        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
+        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(" + this.flip + ")";
     };
     return Player;
 }(GameObject));
@@ -93,6 +98,7 @@ var Healthy = (function (_super) {
         this.images = ["healthy/apple2.png", "healthy/banana1.png", "healthy/Orange_1.png"];
         this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
+        this.speed = this.game.difficulty();
     }
     Healthy.prototype.hit = function () {
         _super.prototype.hit.call(this);
@@ -106,6 +112,7 @@ var UnHealthy = (function (_super) {
         this.images = ["unhealthy/poison1.png", "unhealthy/spider1.png", "unhealthy/Ultrapoison.png", "unhealthy/bubble.png"];
         this.changeDivBackground(this.images[Math.floor((Math.random() * this.images.length) + 0)]);
         this.startPosition((Math.random() * window.innerWidth), -50, 50, 50);
+        this.speed = this.game.difficulty();
     }
     UnHealthy.prototype.hit = function () {
         _super.prototype.hit.call(this);
@@ -120,24 +127,54 @@ var Utils = (function () {
     };
     return Utils;
 }());
+var Life = (function () {
+    function Life(xpos, ypos, score) {
+        this.score = score;
+        this.div = document.createElement("heart");
+        this.score.heartdiv.appendChild(this.div);
+        this.x = xpos;
+        this.y = ypos;
+        this.width = 100;
+        this.height = 100;
+        this.draw();
+    }
+    Life.prototype.draw = function () {
+        this.div.style.transform = "translate(" + this.x + "px, " + this.y + "px)";
+    };
+    Life.prototype.removeMe = function () {
+        this.score.heartdiv.removeChild(this.div);
+    };
+    return Life;
+}());
 var ScoreDisplay = (function (_super) {
     __extends(ScoreDisplay, _super);
     function ScoreDisplay(g) {
         _super.call(this, "score", g);
         this.score = 0;
+        this.lifes = new Array();
         console.log("Creating display");
+        this.textdiv = document.createElement("scoretext");
+        this.heartdiv = document.createElement("scorehearts");
+        this.div.appendChild(this.textdiv);
+        this.div.appendChild(this.heartdiv);
+        this.lifes.push(new Life(300, 0, this), new Life(400, 0, this), new Life(500, 0, this));
     }
     ScoreDisplay.prototype.update = function () {
-        console.log("Update de score display");
-        this.div.innerHTML = "Score: " + this.score;
+        this.textdiv.innerHTML = "Score: " + this.score;
     };
     ScoreDisplay.prototype.scoreUp = function () {
-        console.log("omhoog");
         this.score++;
     };
     ScoreDisplay.prototype.scoreDown = function () {
-        console.log("omlaag");
-        this.score--;
+        this.score -= 10;
+        if (this.score < 0) {
+            this.score = 0;
+        }
+        this.game.lifesleft -= 1;
+        if (this.game.lifesleft < 3) {
+            this.lifes[this.game.lifesleft].removeMe();
+            this.lifes.splice(this.game.lifesleft, 1);
+        }
     };
     ScoreDisplay.prototype.giveScore = function () {
         return this.score;
@@ -149,10 +186,11 @@ var Game = (function () {
         this.Healthys = new Array();
         this.UnHealthys = new Array();
         this.frameCounter = 0;
+        this.lifesleft = 3;
+        this.scoreDisplay = new ScoreDisplay(this);
         this.spawnFrequency = 60;
         this.player = new Player(this);
         this.utils = new Utils();
-        this.scoreDisplay = new ScoreDisplay(this);
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.spawnObject = function () {
@@ -160,14 +198,21 @@ var Game = (function () {
         this.UnHealthys.push(new UnHealthy(this));
     };
     Game.prototype.gameLoop = function () {
-        this.frameCounter++;
-        if (this.frameCounter > this.spawnFrequency) {
-            this.spawnObject();
-            this.frameCounter = 0;
+        if (this.lifesleft >= 1) {
+            this.frameCounter++;
+            if (this.frameCounter > this.spawnFrequency) {
+                this.spawnObject();
+                this.frameCounter = 0;
+            }
+            this.player.move();
+            this.updateElements();
+            this.scoreDisplay.update();
         }
-        this.player.move();
-        this.updateElements();
-        this.scoreDisplay.update();
+        else if (this.lifesleft == 0) {
+            console.log("game voorbij");
+            this.gameover = new GameOver(this);
+            this.lifesleft = -1;
+        }
         requestAnimationFrame(this.gameLoop.bind(this));
     };
     Game.prototype.updateElements = function () {
@@ -203,15 +248,13 @@ var Game = (function () {
     Game.prototype.difficulty = function () {
         var currentScore = this.scoreDisplay.giveScore();
         var speed = 0;
-        console.log(currentScore);
-        if (currentScore > 4) {
-            speed += 50;
-            this.spawnFrequency = 1;
+        var random = Math.floor(Math.random() * 4);
+        random += currentScore;
+        if (random < 3) {
+            random = 3;
         }
-        else {
-            speed += 5;
-            this.spawnFrequency = 60;
-        }
+        this.spawnFrequency = 75 - (currentScore * 2);
+        speed = random;
         return speed;
     };
     return Game;

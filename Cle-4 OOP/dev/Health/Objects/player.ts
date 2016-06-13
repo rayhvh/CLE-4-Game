@@ -9,7 +9,8 @@ class Player extends GameObject {
     private leftkey : number = 39;
     private downSpeed : number = 0;
     private upSpeed : number = 0;
-    
+    private flip:number = 1;
+
     constructor(g:Game) {
         super("player", g);       
         
@@ -25,10 +26,13 @@ class Player extends GameObject {
     private onKeyDown(event:KeyboardEvent):void {
         switch(event.keyCode){
         case this.rightkey:
-            this.upSpeed = 20;
+            this.upSpeed = 25;
+            // flip aanpassen zorgt voor scaleX en flipt je img naar goede kant zodat ie omdraait.
+            this.flip = 1;
             break;
         case this.leftkey:
-            this.downSpeed = 20;
+            this.downSpeed = 25;
+            this.flip = -1;
             break;
         }
     }
@@ -47,8 +51,8 @@ class Player extends GameObject {
    
  public move(){
         this.posX = this.posX - this.upSpeed + this.downSpeed;
-                        
+                     
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
-        this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px) scaleX(-1)";
+        this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px) scaleX("+ this.flip +")";
     }
 }

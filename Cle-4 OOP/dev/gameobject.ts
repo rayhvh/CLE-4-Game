@@ -3,7 +3,7 @@
  */
 class GameObject {
     
-    protected div : HTMLElement;
+    public div : HTMLElement;
     public posX : number;
     public posY : number;
     public width: number;
@@ -11,15 +11,15 @@ class GameObject {
     
     protected bgImage:string;
     
-    private count: number = 0;
+    public speed:number = 0;
     private object: string;
     public removeMe:boolean;
 
     private scores: number = 0;
-    private game: Game;
+    public game: Game;
     
-    constructor(tagname:string, g:Game) {
-        this.game = g;
+    constructor(tagname:string  ,g:Game) {
+      this.game = g;
         // make div
         this.div = document.createElement(tagname);
         document.body.appendChild(this.div);
@@ -36,32 +36,25 @@ class GameObject {
        this.posY = posY;
        this.width = width;
        this.height = height;
-       
-      
+
         // div location
         this.div.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
    }
    
       public hit(){        
-        this.count++;
-        console.log("Optellen " + this.count);
+         this.removeFromGame();
     }
  
  public update(){
-        let speed:number = 0;
+      
         // delete object when out of screen..
-        if(this.count == 1){
-            this.removeFromGame();
-        }
-        
-        else if(this.posY > window.innerHeight+200){       
+        if(this.posY > window.innerHeight+200){       
             this.removeFromGame();        
         }
         
         else{
-            speed = this.game.difficulty();
-            console.log(speed);
-            this.posY+= speed;
+
+            this.posY+= this.speed;
             this.div.style.transform = "translate("+this.posX+"px, "+this.posY +"px)";  
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
         }
