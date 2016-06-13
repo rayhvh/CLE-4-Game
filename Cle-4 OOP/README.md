@@ -5,3 +5,14 @@ Dit is een leeg VS Code project met de volgende instellingen:
 - DEV folder bevat de typescript files
 - tsconfig.json bevat instellingen voor het compileren naar javascript
 - tasks.json bevat het 'build' commando. Dit voer je uit met CMD+SHIFT+B
+
+TODO:
+Vis niet uit scherm. 
+array lokaal highscore. Replay/start button.  Title game?
+Online/ db scores opslaan.
+Betere pixelart? 
+Smooth fish animatie? kleine up/down beweging.
+hitmarkers / feedback pickups.
+random spawn life? 1 op de ..... frames?
+co-op wasd - pijltjes toetsen. Gedeelde levens.
+co-op aparte levens.
