@@ -248,12 +248,18 @@ var Game = (function () {
     Game.prototype.difficulty = function () {
         var currentScore = this.scoreDisplay.giveScore();
         var speed = 0;
+        var spawn = 50;
         var random = Math.floor(Math.random() * 4);
-        random += currentScore;
-        if (random < 3) {
-            random = 3;
+        random += currentScore * 0.5;
+        if (random < 6) {
+            random = 6;
         }
-        this.spawnFrequency = 75 - (currentScore * 2);
+        spawn = 50 - (currentScore * 2);
+        if (spawn < 20) {
+            spawn = 20;
+        }
+        this.spawnFrequency = spawn;
+        console.log("spawn freq " + this.spawnFrequency);
         speed = random;
         return speed;
     };

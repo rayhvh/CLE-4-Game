@@ -114,17 +114,23 @@ class Game {
         let currentScore = this.scoreDisplay.giveScore();
         // maak een lege score om zo te returnen
         let speed: number = 0;
+        let spawn: number = 50;
         // maak een random om snelheid iets meer willekeurig te maken.
         let random: number = Math.floor(Math.random() * 4);
-        // tell random getal op met score en x2 deze voor een snelheid
-        random += currentScore;
+        // tell random getal op met score en 0.8* deze voor een snelheid
+        random += currentScore * 0.5;
         // code voor minimale snelheid. 3 speed.
-        if (random < 3) {
-            random = 3;
+        if (random < 6) {
+            random = 6;
         }
-        // snelheid van spawn is 75 - huidige score. gaat steeds sneller. 
-        this.spawnFrequency = 75 - (currentScore * 2);
-
+        // snelheid van spawn is 50 - huidige score. gaat steeds sneller. 
+        spawn = 50 - (currentScore * 2);
+        if (spawn < 20)
+        {
+            spawn = 20;
+        }
+        this.spawnFrequency = spawn;
+        console.log ("spawn freq " + this.spawnFrequency);
         //snelheid vullen met random gemaakt getal.
         speed = random;
         return speed;
